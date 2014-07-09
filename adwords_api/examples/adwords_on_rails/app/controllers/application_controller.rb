@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate
   protect_from_forgery
 
+  PAGE_SIZE = 50
+  
   private
 
   # Returns the API version in use.
@@ -50,5 +52,42 @@ class ApplicationController < ActionController::Base
       credentials.set_credential(:client_customer_id, selected_account)
     end
     return @api
+  end
+  def request_budgets_list()
+    api = get_adwords_api()
+    service = api.service(:BudgetService, get_api_version())
+    selector = {
+      :fields => ['BudgetId', 'BudgetName'],
+      :ordering => [{:field => 'BudgetId', :sort_order => 'ASCENDING'}],
+      :paging => {:start_index => 0, :number_results => PAGE_SIZE}
+    }
+    result = nil
+    begin
+      result = service.get(selector)
+    rescue AdwordsApi::Errors::ApiException => e
+      logger.fatal("Exception occurred: %s\n%s" % [e.to_s, e.message])
+      flash.now[:alert] =
+          'API request failed with an error, see logs for details'
+    end
+    return result
+  end
+  
+  def request_campaigns_list()
+    api = get_adwords_api()
+    service = api.service(:CampaignService, get_api_version())
+    selector = {
+      :fields => ['Id', 'Name', 'Status'],
+      :ordering => [{:field => 'Id', :sort_order => 'ASCENDING'}],
+      :paging => {:start_index => 0, :number_results => PAGE_SIZE}
+    }
+    result = nil
+    begin
+      result = service.get(selector)
+    rescue AdwordsApi::Errors::ApiException => e
+      logger.fatal("Exception occurred: %s\n%s" % [e.to_s, e.message])
+      flash.now[:alert] =
+          'API request failed with an error, see logs for details'
+    end
+    return result
   end
 end

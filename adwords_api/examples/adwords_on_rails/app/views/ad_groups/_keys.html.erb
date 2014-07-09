@@ -1,0 +1,7 @@
+<table>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Keywords:</b></br>
+<% @keywords.each do |key| %>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= if key.location then key.value + " [+location]" else key.value end %></br>
+<% end %>
+</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= submit_tag("Close", id: @ad_group.id, class: "close") %></br>
+</table>

@@ -1,0 +1,18 @@
+<%= text_field_tag(:budgetname, nil, placeholder: "Budget Name") %>
+<%= text_field_tag(:budgetamount, nil, placeholder: "Budget Amount") %>
+<%= submit_tag("Create Budget", :id=>"createbudget") %>
+<script>
+	function ajax_call() {
+					$.ajax( {
+													type: "POST",
+													url: "/budget/new_budget",
+													data: { budget_name: $("#budgetname").val(), budget_amount: $("#budgetamount").val() }
+									});
+					};
+	$(document).ready(function() {
+					$("#createbudget").click(function() {
+									ajax_call();
+					});
+	});
+</script>
+

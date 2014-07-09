@@ -9,8 +9,8 @@
   # Set the OAuth2 client id and secret. Register your application here to
   # obtain these values:
   #   https://code.google.com/apis/console#access
-  :oauth2_client_id: INSERT_OAUTH2_CLIENT_ID_HERE
-  :oauth2_client_secret: INSERT_OAUTH2_CLIENT_SECRET_HERE
+  :oauth2_client_id: 693683459968-5vpkjoqn5o46m0tda1dq5v7devhohurh.apps.googleusercontent.com
+  :oauth2_client_secret: n--w4Vqi-gjA9aJ1TGN3YY78
   # Optional, see: https://developers.google.com/accounts/docs/OAuth2WebServer
   #:oauth2_state: INSERT_OAUTH2_STATE_HERE
   #:oauth2_access_type: INSERT_OAUTH2_ACCESS_TYPE_HERE
@@ -19,9 +19,9 @@
   #:oauth2_callback: INSERT_OAUTH2_CALLBACK_URL_HERE
 
   # Other parameters.
-  :developer_token: INSERT_YOUR_DEVELOPER_TOKEN_HERE
+  :developer_token: I3sa-clj6bCJ214PBMhtWA
   # If you access only one account you can specify it here.
-  # :client_customer_id: INSERT_YOUR_CLIENT_CUSTOMER_ID_HERE
+  :client_customer_id: 710-444-8277
   :user_agent: demo-rails
 :service:
   # Only production environment is available now, see: http://goo.gl/Plu3o

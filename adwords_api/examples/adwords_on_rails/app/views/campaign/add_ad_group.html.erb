@@ -1,0 +1,93 @@
+<%= select( :campaign, :name, @campaigns.collect { |campaign| [campaign[1].name, campaign[1].id] }.unshift(["[Create New Campaign]", 1]), {prompt: "[Select Campaign]"} ) %>
+<div id="new_campaign" style="display: none">
+<%= text_field_tag(:new_campaign_name, nil, placeholder: "Enter New Campaign Name") %></br>
+<%= select( :campaign, :budget, @budgets.collect { |budget| [budget[1].name, budget[1].id] }, {prompt: "[Select Budget]"} ) %></br>
+<%= text_field_tag(:new_campaign_url, nil, placeholder: "Enter Campaign Base URL") %>
+</div>
+</br><p>Enter location names to be appened to keywords:</p></br>
+<%= text_area( :locations, nil, :cols=>40, :rows=>5) %>
+</br></br>
+<p>Select the ad groups you wish to ad to your campaign:</p>
+<table>
+<tr>
+	<th><%= check_box_tag("master_check") %></th>
+	<th>Ad Group Name</th>
+	<th>Number of Keywords</th>
+	<th></th>
+</tr>
+<% @ad_groups.each do |ad_group| %>
+<tr>
+	<td><%= check_box_tag(id: ad_group.id) %></td>
+	<td><%= ad_group.name %></td>
+	<td><%= ad_group.keywords.length %></td>
+	<td><%= submit_tag("Show Keywords", class: "show_keys", id:"show" + ad_group.id.to_s) %></td>
+</tr>
+<tr id=<%= "rowshow" + ad_group.id.to_s %> ></tr>
+<% end %>
+</table>
+</br>
+<%= submit_tag("Add Ad Groups", id: "add_groups") %>
+<script>
+function ajax_show_keys(group_id) {
+	$.ajax( {
+		type: "POST",
+		url: "/ad_group/show_keys",
+		data: { ad_group_id: group_id }
+	}).then(function(data) {
+		$("#row"+group_id).html(data);
+		});
+};
+function ajax_close_keys(group_id) {
+	$.ajax( {
+		type: "POST",
+		url: "/ad_group/close_keys",
+		data: { ad_group_id: group_id }
+	}).then(function(data) {
+		$("#rowshow"+group_id).html(data);
+		});
+};
+function ajax_add_groups(group_ids) {
+	$.ajax( {
+		type: "POST",
+		url: "/campaign/new_ad_groups",
+		data: { ad_group_ids: group_ids, campaign_id: $("#campaign_name").val(), locations: $("#locations_").val() }
+	}).then(function(data) {
+		window.location.replace('/campaign/index') })
+};
+function ajax_new_campaign(group_ids) {
+	$.ajax( {
+		type: "POST",
+		url: "/campaign/new_campaign_and_ads",
+		data: { ad_group_ids: group_ids, campaign_name: $("#new_campaign_name").val(), campaign_url: $("#new_campaign_url").val(), campaign_budget: $("#campaign_budget").val(), locations: $("#locations_").val() }
+	}).then(function(data) {
+		window.location.replace('/campaign/index') })
+};
+$(document).on("click", ".show_keys", (function() {
+	ajax_show_keys($(this).attr('id'));
+}));
+$(document).on("click", ".close", (function() {
+	$("#rowshow"+$(this).attr('id')).html("");
+}));
+$(document).on("click", "#add_groups", (function() {
+	var group_ids = [];
+	$('input[type="checkbox"]:checked').each(function() {
+		if($(this).attr('id') != "master_check") {
+		group_ids.push($(this).attr('id'));}
+	})
+	if($("#campaign_name").val() == "1") {
+	ajax_new_campaign(group_ids) }
+	else { ajax_add_groups(group_ids); }
+}));
+$(document).on("change", "#campaign_name", (function() {
+	if($("#campaign_name").val() == "1") {
+		$("#new_campaign").show(); }
+	else {$("#new_campaign").hide();}
+}));
+$(document).on("change", "#master_check", (function() {
+	$('input[type="checkbox"]').each(function() {
+		if($("#master_check").prop('checked')) {
+			$(this).prop('checked', true);}
+		else { $(this).prop('checked', false); }
+	})
+}));
+</script>

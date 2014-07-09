@@ -1,0 +1,24 @@
+<h1>Create a new generic ad group</h1>
+<%= text_field_tag(:ad_group_name, nil, placeholder: "Ad Group Name") %>
+</br>Enter keywords, one per line:</br>
+<%= text_area( :keywords, :text, :cols=>40, :rows=>15 ) %>
+</br>Enter keywords to have a location appened, one per line:</br>
+<%= text_area( :loc_keywords, :text, :cols=>40, :rows=>15 ) %>
+</br>
+<%= submit_tag("Create Ad Group", :id=>"create_ad_group") %>
+<script>
+function ajax_call() {
+	$.ajax( {
+		type: "POST",
+		url: "/ad_groups/create",
+		data: { ad_group_name: $("#ad_group_name").val(), keywords: $("#keywords_text").val(), loc_keywords: $("#loc_keywords_text").val() }
+	}).then(function(data) {
+		window.location.replace('/ad_groups');
+		});
+};
+$(document).ready(function() {
+	$("#create_ad_group").click(function() {
+		ajax_call();
+	});
+});
+</script>

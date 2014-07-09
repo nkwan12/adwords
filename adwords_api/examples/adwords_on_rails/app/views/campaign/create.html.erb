@@ -1,0 +1,17 @@
+<%= text_field_tag(:campaignname, nil, placeholder: "Campaign Name") %>
+<%= select( :campaign, :budget, @budgets.collect { |budget| [budget[1].name, budget[1].id] }, {prompt: "[Select Budget]"} ) %>
+<%= submit_tag("Create Campaign", :id=>"createcampaign") %>
+<script>
+function ajax_call() {
+	$.ajax( {
+		type: "POST",
+		url: "/campaign/new_campaign",
+		data: { campaign_name: $("#campaignname").val(), campaign_budget: $("#campaign_budget").val() }
+	});
+};
+$(document).ready(function() {
+	$("#createcampaign").click(function() {
+		ajax_call();
+	});
+});
+</script>

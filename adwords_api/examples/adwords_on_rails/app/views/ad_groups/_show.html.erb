@@ -1,0 +1,21 @@
+<table>
+<tr>
+<th>Keyword</th>
+<th>Match Type</th>
+<th></th>
+<th></th>
+</tr>
+
+<% @ad_group.keywords.each do |key| %>
+<tr>
+	<td><%= if key.location
+				key.value + " [+location]"
+			else
+				key.value
+			end %></td>
+	<td><%= key.match %></td>
+	<td><%= submit_tag("Make Location", class: "make_loc", id: key.id) unless key.location or !key.match.include? "broad" %></td>	
+	<td><%= submit_tag("Delete Keyword", class: "del_key", id: key.id) %></td>
+</tr>
+<% end %>
+</table>

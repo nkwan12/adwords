@@ -1,0 +1,5 @@
+<td><%= check_box_tag(id: @ad_group.id) %></td>
+<td><%= @ad_group.name %></td>
+<td><%= @ad_group.keywords.length %></td>
+<td><%= submit_tag("Show Keywords", class: "show_keys", id:"show" + @ad_group.id.to_s) %></td>
+

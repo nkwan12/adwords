@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+<h1>Listing Generic Ad Groups</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Number of Keywords</th>
+    <th></th>
+  </tr>
+
+<% @ad_groups.each do |ad_group| %>
+  <tr>
+    <td><%= ad_group.name %></td>
+    <td><%= ad_group.keywords.length %></td>
+    <td><%= link_to "Show ad group", ad_group %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'Go Home', home_index_path %>

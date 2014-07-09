@@ -1,0 +1,87 @@
+<div class="notice" style="display: none"><h4>Keyword must be broad match or broad match modifier.</h4><%= submit_tag( "OK", id: "ok" ) %> </div>
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b class="ad_group" id="<%= @ad_group.id %>" >Ad Group Name:</b>
+  <%= @ad_group.name %>
+</p>
+<%= submit_tag( "+ Keyword", id: "add_key" ) %>
+</br>
+<div id="add_div" style="display: none;">
+<%= text_area( :add, :keyword, :cols=>40, :rows=>5 ) %>
+</br>
+<%= submit_tag( "Save", id: "save" ) %>
+<%= submit_tag( "Cancel", id: "cancel" ) %>
+</div>
+<div id="tdiv">
+<table>
+<tr>
+<th>Keyword</th>
+<th>Match Type</th>
+<th></th>
+<th></th>
+</tr>
+
+<% @ad_group.keywords.each do |key| %>
+<tr>
+	<td><%= if key.location
+				key.value + " [+location]"
+			else
+				key.value
+			end %></td>
+	<td><%= key.match %></td>
+	<td><%= submit_tag("Make Location", class: "make_loc", id: key.id) unless key.location or !key.match.include? "broad" %></td>	
+	<td><%= submit_tag("Delete Keyword", class: "del_key", id: key.id) %></td>
+</tr>
+<% end %>
+</table>
+</div>
+</br>
+<%= link_to 'Go Back', ad_groups_path %> |
+<%= link_to 'Go Home', home_index_path %>
+<script>
+function ajax_add_key() {
+	$.ajax( {
+		type: "POST",
+		url: "/ad_group/add_keys",
+		data: { ad_group_id: $(".ad_group").attr('id'), keywords: $("#add_keyword").val() }
+	}).then(function(data) {
+		$("#add_keyword").val("");
+		$("#add_div").hide();
+		$("#tdiv").html(data);
+		});
+};
+function ajax_del_key(key_id) {
+	$.ajax( {
+		type: "POST",
+		url: "/ad_group/del_key",
+		data: { keyword_id: key_id }
+	}).then(function(data) {
+		$("#tdiv").html(data);
+		});
+};
+function ajax_make_loc(key_id) {
+	$.ajax( {
+		type: "POST",
+		url: "/ad_group/make_loc",
+		data: { keyword_id: key_id }
+	}).then(function(data) {
+		$("#tdiv").html(data);
+		});
+};
+$("#add_key").click(function() {
+	$("#add_div").toggle();
+});
+$("#cancel").click(function() {
+	$("#add_div").hide();
+});
+$("#save").click(function() {
+	ajax_add_key();
+});
+$(document).on("click", ".del_key", (function() {
+	ajax_del_key($(this).attr('id'));
+}));
+$(document).on("click", ".make_loc", (function() {
+	ajax_make_loc($(this).attr('id'));
+}));
+</script>
